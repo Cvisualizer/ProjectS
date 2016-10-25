@@ -1,0 +1,28 @@
+{ "global" : [ 
+		{ "name" : "n", "type" : "int", "class" : "var" } ,
+		{ "name" : "mul", "type" : "int", "class" : "func" } ,
+		{ "name" : "main", "type" : "int", "class" : "func" } 	]	 ,
+
+ "local" : [ 
+		 { "function" : "mul", "var" : "x", "type" : "int", "class" : "param" } , 
+		 { "function" : "mul", "var" : "y", "type" : "int", "class" : "param" } , 
+		 { "function" : "mul", "var" : "z", "type" : "int", "class" : "param" } , 
+		 { "function" : "mul", "var" : "xyz", "type" : "int", "class" : "param" } , 
+		 { "function" : "mul", "var" : "a", "type" : "int", "class" : "var" } , 
+		 { "function" : "mul", "var" : "b", "type" : "int", "class" : "var" } 	],
+ "code" : 
+[		{ "call"   :  { "function"  : "main" , "param" : [ ]  }  } ,
+		{ "assign" :  { "path" : "main" ,  "first" : 999 ,  "addr" : 0 ,  "value" : 2 , "global" : true    }   },
+		{ "call"   :  { "function"  : "mul" ,  "param" : [  5 , 10 , 10 , 10  ]  }   },
+		{ "assign" :  { "path" : "main,mul" ,  "first" : 992 ,  "addr" : 996 ,  "value" : 10 , "global" : false    }   },
+		{ "assign" :  { "path" : "main,mul" ,  "first" : 992 ,  "addr" : 997 ,  "value" : 5 , "global" : false    }   },
+		{ "ref"    :  { "first" : 992, "addr" : 992,  "global" : false  }   } ,
+		{ "ref"    :  { "first" : 992, "addr" : 993,  "global" : false  }   } ,
+		{ "ref"    :  { "first" : 992, "addr" : 996,  "global" : false  }   } ,
+		{ "ref"    :  { "first" : 992, "addr" : 997,  "global" : false  }   } ,
+		{ "return" : 70 }, 
+		{ "ref"    :  { "first" : 999, "addr" : 0,  "global" : true  }   } ,
+		{ "printf" : 140 } ,
+		{ "return" : 0 }, 
+		{ "halt"   : 0  }  ]    , 
+ "info" :       { "depth" : 2, "call" : 2, "max" : 10,  "min" : 2, "assign" : true   }    }

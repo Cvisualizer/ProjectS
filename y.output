@@ -1,0 +1,1057 @@
+State 41 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 @1: /* empty */
+
+    2 program: @1 glbl_decl
+
+    3 glbl_decl: /* empty */
+    4          | glbl_decl decl ';'
+    5          | glbl_decl func_def
+    6          | glbl_decl error ';'
+
+    7 decl: TYPE ID
+    8     | TYPE f_head
+    9     | decl ',' ID
+   10     | decl ',' f_head
+
+   11 @2: /* empty */
+
+   12 f_head: ID @2 '(' p_list ')'
+
+   13 p_list: /* empty */
+   14       | p_decl
+   15       | p_list ',' p_decl
+
+   16 p_decl: TYPE ID
+
+   17 @3: /* empty */
+
+   18 func_def: TYPE f_head '{' @3 decl_list st_list '}'
+
+   19 @4: /* empty */
+
+   20 block: '{' @4 st_list '}'
+
+   21 decl_list: /* empty */
+   22          | decl_list decl ';'
+
+   23 st_list: stmnt
+   24        | st_list stmnt
+
+   25 stmnt: block
+   26      | expr ';'
+   27      | READ LHS ';'
+   28      | WRITE expr ';'
+   29      | if_part
+
+   30 @5: /* empty */
+
+   31 stmnt: if_part ELSE @5 stmnt
+   32      | RETURN ';'
+   33      | RETURN expr ';'
+
+   34 @6: /* empty */
+
+   35 if_part: IF '(' expr ')' @6 stmnt
+
+   36 LHS: ID
+
+   37 expr: LHS '=' expr
+   38     | expr RELOP expr
+   39     | expr ADDOP expr
+   40     | expr MULOP expr
+   41     | '(' expr ')'
+   42     | ADDOP expr
+   43     | ID '(' arg_list ')'
+   44     | ID
+   45     | NUM
+
+   46 arg_list: /* empty */
+   47         | expr
+   48         | arg_list ',' expr
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 12 35 41 43
+')' (41) 12 35 41 43
+',' (44) 9 10 15 48
+';' (59) 4 6 22 26 27 28 32 33
+'=' (61) 37
+'{' (123) 18 20
+'}' (125) 18 20
+error (256) 6
+IF (258) 35
+ELSE (259) 31
+READ (260) 27
+WRITE (261) 28
+RETURN (262) 32 33
+TYPE (263) 7 8 16 18
+RELOP (264) 38
+ADDOP (265) 39 42
+MULOP (266) 40
+NUM (267) 45
+ID (268) 7 9 12 16 36 43 44
+UM (269)
+
+
+Nonterminals, with rules where they appear
+
+$accept (22)
+    on left: 0
+program (23)
+    on left: 2, on right: 0
+@1 (24)
+    on left: 1, on right: 2
+glbl_decl (25)
+    on left: 3 4 5 6, on right: 2 4 5 6
+decl (26)
+    on left: 7 8 9 10, on right: 4 9 10 22
+f_head (27)
+    on left: 12, on right: 8 10 18
+@2 (28)
+    on left: 11, on right: 12
+p_list (29)
+    on left: 13 14 15, on right: 12 15
+p_decl (30)
+    on left: 16, on right: 14 15
+func_def (31)
+    on left: 18, on right: 5
+@3 (32)
+    on left: 17, on right: 18
+block (33)
+    on left: 20, on right: 25
+@4 (34)
+    on left: 19, on right: 20
+decl_list (35)
+    on left: 21 22, on right: 18 22
+st_list (36)
+    on left: 23 24, on right: 18 20 24
+stmnt (37)
+    on left: 25 26 27 28 29 31 32 33, on right: 23 24 31 35
+@5 (38)
+    on left: 30, on right: 31
+if_part (39)
+    on left: 35, on right: 29 31
+@6 (40)
+    on left: 34, on right: 35
+LHS (41)
+    on left: 36, on right: 27 37
+expr (42)
+    on left: 37 38 39 40 41 42 43 44 45, on right: 26 28 33 35 37 38
+    39 40 41 42 47 48
+arg_list (43)
+    on left: 46 47 48, on right: 43 48
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (@1)
+
+    program  go to state 1
+    @1       go to state 2
+
+
+state 1
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 3
+
+
+state 2
+
+    2 program: @1 . glbl_decl
+
+    $default  reduce using rule 3 (glbl_decl)
+
+    glbl_decl  go to state 4
+
+
+state 3
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 4
+
+    2 program: @1 glbl_decl .
+    4 glbl_decl: glbl_decl . decl ';'
+    5          | glbl_decl . func_def
+    6          | glbl_decl . error ';'
+
+    error  shift, and go to state 5
+    TYPE   shift, and go to state 6
+
+    $end  reduce using rule 2 (program)
+
+    decl      go to state 7
+    func_def  go to state 8
+
+
+state 5
+
+    6 glbl_decl: glbl_decl error . ';'
+
+    ';'  shift, and go to state 9
+
+
+state 6
+
+    7 decl: TYPE . ID
+    8     | TYPE . f_head
+   18 func_def: TYPE . f_head '{' @3 decl_list st_list '}'
+
+    ID  shift, and go to state 10
+
+    f_head  go to state 11
+
+
+state 7
+
+    4 glbl_decl: glbl_decl decl . ';'
+    9 decl: decl . ',' ID
+   10     | decl . ',' f_head
+
+    ';'  shift, and go to state 12
+    ','  shift, and go to state 13
+
+
+state 8
+
+    5 glbl_decl: glbl_decl func_def .
+
+    $default  reduce using rule 5 (glbl_decl)
+
+
+state 9
+
+    6 glbl_decl: glbl_decl error ';' .
+
+    $default  reduce using rule 6 (glbl_decl)
+
+
+state 10
+
+    7 decl: TYPE ID .
+   12 f_head: ID . @2 '(' p_list ')'
+
+    '('       reduce using rule 11 (@2)
+    $default  reduce using rule 7 (decl)
+
+    @2  go to state 14
+
+
+state 11
+
+    8 decl: TYPE f_head .
+   18 func_def: TYPE f_head . '{' @3 decl_list st_list '}'
+
+    '{'  shift, and go to state 15
+
+    $default  reduce using rule 8 (decl)
+
+
+state 12
+
+    4 glbl_decl: glbl_decl decl ';' .
+
+    $default  reduce using rule 4 (glbl_decl)
+
+
+state 13
+
+    9 decl: decl ',' . ID
+   10     | decl ',' . f_head
+
+    ID  shift, and go to state 16
+
+    f_head  go to state 17
+
+
+state 14
+
+   12 f_head: ID @2 . '(' p_list ')'
+
+    '('  shift, and go to state 18
+
+
+state 15
+
+   18 func_def: TYPE f_head '{' . @3 decl_list st_list '}'
+
+    $default  reduce using rule 17 (@3)
+
+    @3  go to state 19
+
+
+state 16
+
+    9 decl: decl ',' ID .
+   12 f_head: ID . @2 '(' p_list ')'
+
+    '('       reduce using rule 11 (@2)
+    $default  reduce using rule 9 (decl)
+
+    @2  go to state 14
+
+
+state 17
+
+   10 decl: decl ',' f_head .
+
+    $default  reduce using rule 10 (decl)
+
+
+state 18
+
+   12 f_head: ID @2 '(' . p_list ')'
+
+    TYPE  shift, and go to state 20
+
+    $default  reduce using rule 13 (p_list)
+
+    p_list  go to state 21
+    p_decl  go to state 22
+
+
+state 19
+
+   18 func_def: TYPE f_head '{' @3 . decl_list st_list '}'
+
+    $default  reduce using rule 21 (decl_list)
+
+    decl_list  go to state 23
+
+
+state 20
+
+   16 p_decl: TYPE . ID
+
+    ID  shift, and go to state 24
+
+
+state 21
+
+   12 f_head: ID @2 '(' p_list . ')'
+   15 p_list: p_list . ',' p_decl
+
+    ','  shift, and go to state 25
+    ')'  shift, and go to state 26
+
+
+state 22
+
+   14 p_list: p_decl .
+
+    $default  reduce using rule 14 (p_list)
+
+
+state 23
+
+   18 func_def: TYPE f_head '{' @3 decl_list . st_list '}'
+   22 decl_list: decl_list . decl ';'
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    TYPE    shift, and go to state 31
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+
+    decl     go to state 37
+    block    go to state 38
+    st_list  go to state 39
+    stmnt    go to state 40
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 24
+
+   16 p_decl: TYPE ID .
+
+    $default  reduce using rule 16 (p_decl)
+
+
+state 25
+
+   15 p_list: p_list ',' . p_decl
+
+    TYPE  shift, and go to state 20
+
+    p_decl  go to state 44
+
+
+state 26
+
+   12 f_head: ID @2 '(' p_list ')' .
+
+    $default  reduce using rule 12 (f_head)
+
+
+state 27
+
+   35 if_part: IF . '(' expr ')' @6 stmnt
+
+    '('  shift, and go to state 45
+
+
+state 28
+
+   27 stmnt: READ . LHS ';'
+
+    ID  shift, and go to state 46
+
+    LHS  go to state 47
+
+
+state 29
+
+   28 stmnt: WRITE . expr ';'
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 48
+
+
+state 30
+
+   32 stmnt: RETURN . ';'
+   33      | RETURN . expr ';'
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    ';'    shift, and go to state 49
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 50
+
+
+state 31
+
+    7 decl: TYPE . ID
+    8     | TYPE . f_head
+
+    ID  shift, and go to state 10
+
+    f_head  go to state 51
+
+
+state 32
+
+   42 expr: ADDOP . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 52
+
+
+state 33
+
+   45 expr: NUM .
+
+    $default  reduce using rule 45 (expr)
+
+
+state 34
+
+   36 LHS: ID .
+   43 expr: ID . '(' arg_list ')'
+   44     | ID .
+
+    '('  shift, and go to state 53
+
+    '='       reduce using rule 36 (LHS)
+    $default  reduce using rule 44 (expr)
+
+
+state 35
+
+   41 expr: '(' . expr ')'
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 54
+
+
+state 36
+
+   20 block: '{' . @4 st_list '}'
+
+    $default  reduce using rule 19 (@4)
+
+    @4  go to state 55
+
+
+state 37
+
+    9 decl: decl . ',' ID
+   10     | decl . ',' f_head
+   22 decl_list: decl_list decl . ';'
+
+    ';'  shift, and go to state 56
+    ','  shift, and go to state 13
+
+
+state 38
+
+   25 stmnt: block .
+
+    $default  reduce using rule 25 (stmnt)
+
+
+state 39
+
+   18 func_def: TYPE f_head '{' @3 decl_list st_list . '}'
+   24 st_list: st_list . stmnt
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+    '}'     shift, and go to state 57
+
+    block    go to state 38
+    stmnt    go to state 58
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 40
+
+   23 st_list: stmnt .
+
+    $default  reduce using rule 23 (st_list)
+
+
+state 41
+
+   29 stmnt: if_part .
+   31      | if_part . ELSE @5 stmnt
+
+    ELSE  shift, and go to state 59
+
+    ELSE      [reduce using rule 29 (stmnt)]
+    $default  reduce using rule 29 (stmnt)
+
+
+state 42
+
+   37 expr: LHS . '=' expr
+
+    '='  shift, and go to state 60
+
+
+state 43
+
+   26 stmnt: expr . ';'
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+    ';'    shift, and go to state 64
+
+
+state 44
+
+   15 p_list: p_list ',' p_decl .
+
+    $default  reduce using rule 15 (p_list)
+
+
+state 45
+
+   35 if_part: IF '(' . expr ')' @6 stmnt
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 65
+
+
+state 46
+
+   36 LHS: ID .
+
+    $default  reduce using rule 36 (LHS)
+
+
+state 47
+
+   27 stmnt: READ LHS . ';'
+
+    ';'  shift, and go to state 66
+
+
+state 48
+
+   28 stmnt: WRITE expr . ';'
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+    ';'    shift, and go to state 67
+
+
+state 49
+
+   32 stmnt: RETURN ';' .
+
+    $default  reduce using rule 32 (stmnt)
+
+
+state 50
+
+   33 stmnt: RETURN expr . ';'
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+    ';'    shift, and go to state 68
+
+
+state 51
+
+    8 decl: TYPE f_head .
+
+    $default  reduce using rule 8 (decl)
+
+
+state 52
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+   42     | ADDOP expr .
+
+    $default  reduce using rule 42 (expr)
+
+
+state 53
+
+   43 expr: ID '(' . arg_list ')'
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    $default  reduce using rule 46 (arg_list)
+
+    LHS       go to state 42
+    expr      go to state 69
+    arg_list  go to state 70
+
+
+state 54
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+   41     | '(' expr . ')'
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+    ')'    shift, and go to state 71
+
+
+state 55
+
+   20 block: '{' @4 . st_list '}'
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+
+    block    go to state 38
+    st_list  go to state 72
+    stmnt    go to state 40
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 56
+
+   22 decl_list: decl_list decl ';' .
+
+    $default  reduce using rule 22 (decl_list)
+
+
+state 57
+
+   18 func_def: TYPE f_head '{' @3 decl_list st_list '}' .
+
+    $default  reduce using rule 18 (func_def)
+
+
+state 58
+
+   24 st_list: st_list stmnt .
+
+    $default  reduce using rule 24 (st_list)
+
+
+state 59
+
+   31 stmnt: if_part ELSE . @5 stmnt
+
+    $default  reduce using rule 30 (@5)
+
+    @5  go to state 73
+
+
+state 60
+
+   37 expr: LHS '=' . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 74
+
+
+state 61
+
+   38 expr: expr RELOP . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 75
+
+
+state 62
+
+   39 expr: expr ADDOP . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 76
+
+
+state 63
+
+   40 expr: expr MULOP . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 77
+
+
+state 64
+
+   26 stmnt: expr ';' .
+
+    $default  reduce using rule 26 (stmnt)
+
+
+state 65
+
+   35 if_part: IF '(' expr . ')' @6 stmnt
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+    ')'    shift, and go to state 78
+
+
+state 66
+
+   27 stmnt: READ LHS ';' .
+
+    $default  reduce using rule 27 (stmnt)
+
+
+state 67
+
+   28 stmnt: WRITE expr ';' .
+
+    $default  reduce using rule 28 (stmnt)
+
+
+state 68
+
+   33 stmnt: RETURN expr ';' .
+
+    $default  reduce using rule 33 (stmnt)
+
+
+state 69
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+   47 arg_list: expr .
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+
+    $default  reduce using rule 47 (arg_list)
+
+
+state 70
+
+   43 expr: ID '(' arg_list . ')'
+   48 arg_list: arg_list . ',' expr
+
+    ','  shift, and go to state 79
+    ')'  shift, and go to state 80
+
+
+state 71
+
+   41 expr: '(' expr ')' .
+
+    $default  reduce using rule 41 (expr)
+
+
+state 72
+
+   20 block: '{' @4 st_list . '}'
+   24 st_list: st_list . stmnt
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+    '}'     shift, and go to state 81
+
+    block    go to state 38
+    stmnt    go to state 58
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 73
+
+   31 stmnt: if_part ELSE @5 . stmnt
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+
+    block    go to state 38
+    stmnt    go to state 82
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 74
+
+   37 expr: LHS '=' expr .
+   38     | expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+
+    $default  reduce using rule 37 (expr)
+
+
+state 75
+
+   38 expr: expr . RELOP expr
+   38     | expr RELOP expr .
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+
+    $default  reduce using rule 38 (expr)
+
+
+state 76
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   39     | expr ADDOP expr .
+   40     | expr . MULOP expr
+
+    MULOP  shift, and go to state 63
+
+    $default  reduce using rule 39 (expr)
+
+
+state 77
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+   40     | expr MULOP expr .
+
+    $default  reduce using rule 40 (expr)
+
+
+state 78
+
+   35 if_part: IF '(' expr ')' . @6 stmnt
+
+    $default  reduce using rule 34 (@6)
+
+    @6  go to state 83
+
+
+state 79
+
+   48 arg_list: arg_list ',' . expr
+
+    ADDOP  shift, and go to state 32
+    NUM    shift, and go to state 33
+    ID     shift, and go to state 34
+    '('    shift, and go to state 35
+
+    LHS   go to state 42
+    expr  go to state 84
+
+
+state 80
+
+   43 expr: ID '(' arg_list ')' .
+
+    $default  reduce using rule 43 (expr)
+
+
+state 81
+
+   20 block: '{' @4 st_list '}' .
+
+    $default  reduce using rule 20 (block)
+
+
+state 82
+
+   31 stmnt: if_part ELSE @5 stmnt .
+
+    $default  reduce using rule 31 (stmnt)
+
+
+state 83
+
+   35 if_part: IF '(' expr ')' @6 . stmnt
+
+    IF      shift, and go to state 27
+    READ    shift, and go to state 28
+    WRITE   shift, and go to state 29
+    RETURN  shift, and go to state 30
+    ADDOP   shift, and go to state 32
+    NUM     shift, and go to state 33
+    ID      shift, and go to state 34
+    '('     shift, and go to state 35
+    '{'     shift, and go to state 36
+
+    block    go to state 38
+    stmnt    go to state 85
+    if_part  go to state 41
+    LHS      go to state 42
+    expr     go to state 43
+
+
+state 84
+
+   38 expr: expr . RELOP expr
+   39     | expr . ADDOP expr
+   40     | expr . MULOP expr
+   48 arg_list: arg_list ',' expr .
+
+    RELOP  shift, and go to state 61
+    ADDOP  shift, and go to state 62
+    MULOP  shift, and go to state 63
+
+    $default  reduce using rule 48 (arg_list)
+
+
+state 85
+
+   35 if_part: IF '(' expr ')' @6 stmnt .
+
+    $default  reduce using rule 35 (if_part)
